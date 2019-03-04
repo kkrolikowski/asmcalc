@@ -8,3 +8,25 @@
 ;   ./asmcalc 1 + 1
 ;   ./asmcalc 2 * 2
 ;   ./asmcalc 4 - 1
+
+section .data
+
+; -----
+; Basic constants
+
+NULL                equ 0
+LF                  equ 10
+
+EXIT_SUCCESS        equ 0
+sys_EXIT            equ 60
+
+; -----
+; Error messages
+
+NAN1                db "Error: First argument is not a valid number.", LF, NULL
+NAN3                db "Error: Third argument is not a valid number.", LF, NULL
+OperatorError       db "Error: Invalid operator. Valid operators: *,-,/,+", LF, NULL
+tooFewError         db "Error: Too few arguments.", LF
+                    db "Syntax: ./asmcalc a [+|-|*|/] b", LF, NULL
+tooManyError        db "Error: Too many arguments.", LF
+                    db "Syntax: ./asmcalc a [+|-|*|/] b", LF, NULL
