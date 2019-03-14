@@ -71,6 +71,13 @@ main:
     jl InvalidOperator
     mov byte [operation], al
 
+    mov rdi, qword [r13+3*8]
+    call getNum
+    cmp rax, 0
+    je ThirdInvalid
+
+    mov qword [numB], rax
+
     jmp last
 
 tooFewArgs:
@@ -85,6 +92,11 @@ tooManyArgs:
 
 FirstInvalid:
     mov rdi, NAN1
+    call prints
+    jmp last
+
+ThirdInvalid:
+    mov rdi, NAN3
     call prints
     jmp last
 
