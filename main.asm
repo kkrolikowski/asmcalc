@@ -34,7 +34,7 @@ tooManyError        db "Error: Too many arguments.", LF
 ; -----
 ; Calculation results
 
-sum                 dq 0
+result              dq 0
 
 section .bss
 numA                resq 1
@@ -44,6 +44,7 @@ operation           resb 1
 extern getNum
 extern prints
 extern operator
+extern calc
 
 section .text
 
@@ -78,6 +79,11 @@ main:
 
     mov qword [numB], rax
 
+    mov rdi, qword [numA]
+    mov sil, byte [operation]
+    mov rdx, qword [numB]
+    call calc
+    
     jmp last
 
 tooFewArgs:
