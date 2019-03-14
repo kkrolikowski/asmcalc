@@ -40,7 +40,7 @@ section .bss
 numA                resq 1
 numB                resq 1
 
-extern toInt
+extern getNum
 
 section .text
 
@@ -50,7 +50,7 @@ main:
     mov r13, rsi                        ; *argv[]
 
     mov rdi, qword [r13+1*8]
-    call toInt
+    call getNum
     mov qword [numA], rax
 
 last:

@@ -1,5 +1,5 @@
 ; string.asm -- String manipulation functions
-; - toInt(): converts string to integer
+; - getNum(): converts string to integer
 ; - operator(): validates and returns operator sign
 
 
@@ -9,8 +9,8 @@ NULL                        equ 0
 
 section .text
 
-global toInt
-toInt:
+global getNum
+getNum:
     push rbp
     mov rbp, rsp
     sub rsp, 16
@@ -99,12 +99,12 @@ PopLoop:
 
 RetNum:
     mov rax, r14
-    jmp toIntEnd
+    jmp getNumEnd
 
 NaN:
     mov rax, 0
 
-toIntEnd:
+getNumEnd:
     pop r14
     pop r13
     pop r12
