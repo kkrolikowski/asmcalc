@@ -1,14 +1,21 @@
 ; string.asm -- String manipulation functions
 ; - getNum(): converts string to integer
 ; - operator(): validates and returns operator sign
-
+; - prints(): prints given string on the screen
 
 section .data
 
 NULL                        equ 0
+STDOUT                      equ 1
+SYS_write                   equ 1
 
 section .text
-
+; -----
+; getNum() -- gets number from user
+; HLL call: int num = getNum(str);
+; Returns:
+;   * integer on success
+;   * 0 - when str is not a number
 global getNum
 getNum:
     push rbp
@@ -140,4 +147,47 @@ getNumEnd:
     pop rbx
     mov rsp, rbp
     pop rbp
+    ret
+
+; -----
+; prints() -- prints given string on the screen
+; HLL call: prints(str);
+; Returns:
+;   * nothing
+global prints
+prints:
+    push rbx
+
+    mov rbx, rdi                        ; save the string adress
+    mov rdx, 0                          ; set character counter
+
+; -----
+; Stage I - count characters to print
+
+CharCountLoop:
+    cmp byte [rbx], NULL
+    je CharCountDone
+
+    inc rdx                             ; increment char counter
+    inc rbx                             ; next char.
+    jmp CharCountLoop
+
+; -----
+; Stage II - print characters
+
+CharCountDone:
+    cmp rdx, 0                          ; when there's nothing to print
+    je printsDone                       ; just end a function
+
+; Print a given numbers of characters on the screen
+    mov rax, SYS_write
+    mov rsi, rdi
+    mov rdi, STDOUT
+    syscall
+
+; -----
+; Stage III - function end
+
+printsDone:
+    pop rbx
     ret

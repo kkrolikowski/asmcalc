@@ -41,6 +41,7 @@ numA                resq 1
 numB                resq 1
 
 extern getNum
+extern prints
 
 section .text
 
@@ -51,7 +52,15 @@ main:
 
     mov rdi, qword [r13+1*8]
     call getNum
+    cmp rax, 0
+    je FirstInvalid
+
     mov qword [numA], rax
+    
+    jmp last
+FirstInvalid:
+    mov rdi, NAN1
+    call prints
 
 last:
     mov rax, sys_EXIT
