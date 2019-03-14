@@ -192,13 +192,23 @@ printsDone:
     pop rbx
     ret
 
+; -----
+; operator() -- function gets and validates few math operators
+; HLL call: char op = operator(string);
+; Returns:
+;   * math operator ASCII code (success)
+;   * -1 (failure)
 global operator
 operator:
     push rbx
 
-    mov rbx, rdi
-    mov r10, 0
+    mov rbx, rdi                        ; set the string pointer
+    mov r10, 0                          ; counter
 
+; -----
+; Stage I - count the characters
+; If there are more than 1 character, we can assume
+; that operator is invalid
 cntChrLoop:
     cmp byte [rbx], NULL
     je VerifyOp
@@ -208,6 +218,10 @@ cntChrLoop:
     ja InvalidOp
     jmp cntChrLoop
 
+; -----
+; Stage II - operator verification
+; If we have one of the below characters
+; we can return it to the callee
 VerifyOp:
     mov rbx, rdi
     cmp byte [rbx], "+"
@@ -219,6 +233,10 @@ VerifyOp:
     cmp byte [rbx], "/"
     je ReturnOp
 
+; -----
+; Stage IV - return a char.
+; Now we can return a valid math operator
+; or -1 code in case of an error
 InvalidOp:
     xor rax, rax
     mov rax, -1
