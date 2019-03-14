@@ -191,3 +191,43 @@ CharCountDone:
 printsDone:
     pop rbx
     ret
+
+global operator
+operator:
+    push rbx
+
+    mov rbx, rdi
+    mov r10, 0
+
+cntChrLoop:
+    cmp byte [rbx], NULL
+    je VerifyOp
+    inc rbx
+    inc r10
+    cmp r10, 1
+    ja InvalidOp
+    jmp cntChrLoop
+
+VerifyOp:
+    mov rbx, rdi
+    cmp byte [rbx], "+"
+    je ReturnOp
+    cmp byte [rbx], "-"
+    je ReturnOp
+    cmp byte [rbx], "*"
+    je ReturnOp
+    cmp byte [rbx], "/"
+    je ReturnOp
+
+InvalidOp:
+    xor rax, rax
+    mov rax, -1
+    jmp operatorDone
+
+ReturnOp:
+    xor rax, rax
+    mov al, byte [rbx]
+
+operatorDone:
+    pop rbx
+    ret

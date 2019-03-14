@@ -39,9 +39,11 @@ sum                 dq 0
 section .bss
 numA                resq 1
 numB                resq 1
+operation           resb 1
 
 extern getNum
 extern prints
+extern operator
 
 section .text
 
@@ -62,6 +64,13 @@ main:
 
     mov qword [numA], rax
     
+    mov rdi, qword [r13+2*8]
+    call operator
+
+    cmp rax, 0
+    jl InvalidOperator
+    mov byte [operation], al
+
     jmp last
 
 tooFewArgs:
@@ -76,6 +85,11 @@ tooManyArgs:
 
 FirstInvalid:
     mov rdi, NAN1
+    call prints
+    jmp last
+
+InvalidOperator:
+    mov rdi, OperatorError
     call prints
 
 last:
