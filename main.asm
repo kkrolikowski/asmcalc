@@ -50,6 +50,11 @@ main:
     mov r12, rdi                        ; argc
     mov r13, rsi                        ; *argv[]
 
+    cmp r12, 4
+    jb tooFewArgs
+    cmp r12, 4
+    ja tooManyArgs
+
     mov rdi, qword [r13+1*8]
     call getNum
     cmp rax, 0
@@ -58,6 +63,17 @@ main:
     mov qword [numA], rax
     
     jmp last
+
+tooFewArgs:
+    mov rdi, tooFewError
+    call prints
+    jmp last
+
+tooManyArgs:
+    mov rdi, tooManyError
+    call prints
+    jmp last
+
 FirstInvalid:
     mov rdi, NAN1
     call prints
