@@ -5,11 +5,20 @@ section .text
 
 global calc
 calc:
-    cmp rsi, "+"
+    cmp sil, "+"
     je calcSum
+    cmp sil, "-"
+    je calcSub
+    jmp calcEnd
 
 calcSum:
     mov rax, rdi
     add rax, rdx
-    
+    jmp calcEnd
+
+calcSub:
+    mov rax, rdi
+    sub rax, rdx
+
+calcEnd:
     ret
