@@ -2,6 +2,7 @@
 ; - getNum(): converts string to integer
 ; - operator(): validates and returns operator sign
 ; - prints(): prints given string on the screen
+; - int2str(): converts integer into string form
 
 section .data
 
@@ -247,5 +248,58 @@ ReturnOp:
     mov al, byte [rbx]
 
 operatorDone:
+    pop rbx
+    ret
+
+; -----
+; int2str() -- function transforms integer into string
+; HLL call: int2str(number, string);
+; Returns:
+;   nothing
+global int2str
+int2str:
+    push rbx
+    push r12
+
+    mov r10, 10                         ; divisior
+    mov r12, 0                          ; stack items count
+    mov r11, 0                          ; items popped from stack
+    mov rbx, rsi                        ; string pointer
+
+    mov rax, rdi
+    cmp rax, 0
+    jl Negative
+    jmp PushRemLoop
+
+Negative:
+    cqo
+    imul rax, -1
+    mov byte [rbx], "-"
+    inc rbx
+
+PushRemLoop:
+    cmp rax, 0
+    je PopRemLoop
+
+    mov rdx, 0
+    div r10
+    push rdx
+    inc r12
+    jmp PushRemLoop
+
+PopRemLoop:
+    cmp r11, r12
+    je int2strEND
+
+    pop rax
+    add rax, 48
+    mov byte [rbx], al
+    inc rbx
+    inc r11
+    jmp PopRemLoop
+
+int2strEND:
+    mov byte [rbx], NULL
+    pop r12
     pop rbx
     ret

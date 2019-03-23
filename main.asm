@@ -16,6 +16,7 @@ section .data
 
 NULL                equ 0
 LF                  equ 10
+INT_MAX             equ 10
 
 EXIT_SUCCESS        equ 0
 sys_EXIT            equ 60
@@ -30,7 +31,7 @@ tooFewError         db "Error: Too few arguments.", LF
                     db "Syntax: ./asmcalc a [+|-|*|/] b", LF, NULL
 tooManyError        db "Error: Too many arguments.", LF
                     db "Syntax: ./asmcalc a [+|-|*|/] b", LF, NULL
-
+newLine             db LF, NULL
 ; -----
 ; Calculation results
 
@@ -40,11 +41,13 @@ section .bss
 numA                resq 1
 numB                resq 1
 operation           resb 1
+intstr              resb INT_MAX+2      ; two extra bytes for sign and NULL termination
 
 extern getNum
 extern prints
 extern operator
 extern calc
+extern int2str
 
 section .text
 
@@ -83,7 +86,16 @@ main:
     mov sil, byte [operation]
     mov rdx, qword [numB]
     call calc
-    
+
+    mov rdi, rax
+    mov rsi, intstr
+    call int2str
+
+    mov rdi, intstr
+    call prints
+    mov rdi, newLine
+    call prints
+
     jmp last
 
 tooFewArgs:
