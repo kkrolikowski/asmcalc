@@ -1,4 +1,5 @@
 ; math.asm -- mathematical functions.
+; - calc(): calculates and display results
 
 section .data
 
@@ -8,12 +9,18 @@ LF                          equ 10
 newLine                     db LF, NULL
 remainder                   db " R: ", NULL
 zero                        db "0", LF, NULL
+toobig                      db "Result exceeds 64-bits", LF, NULL
 
 extern int2str
 extern prints
 
 section .text
 
+; -----
+; calc() -- calculates and display results
+; HLL call: calc(num1, operator, num2);
+; Returns:
+;   * nothing
 global calc
 calc:
     push rbp
@@ -38,6 +45,9 @@ calcMul:
     mov rax, rdi
     imul rdx
 
+    cmp rdx, 0
+    ja ResTooBig
+
     mov rdi, rax
     mov rsi, rbx
     call int2str
@@ -45,6 +55,12 @@ calcMul:
     mov rdi, rbx
     call prints
     mov rdi, newLine
+    call prints
+    
+    jmp calcEnd
+
+ResTooBig:
+    mov rdi, toobig
     call prints
 
     jmp calcEnd
