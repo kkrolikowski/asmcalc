@@ -9,6 +9,14 @@ calc:
     je calcSum
     cmp sil, "-"
     je calcSub
+    cmp sil, "*"
+    je calcMul
+
+    jmp calcEnd
+
+calcMul:
+    mov rax, rdi
+    imul rdx
     jmp calcEnd
 
 calcSum:
