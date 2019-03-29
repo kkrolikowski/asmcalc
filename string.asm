@@ -9,6 +9,7 @@ section .data
 NULL                        equ 0
 STDOUT                      equ 1
 SYS_write                   equ 1
+STR_MAX                     equ 20
 
 section .text
 ; -----
@@ -296,6 +297,10 @@ PopRemLoop:
 
     pop rax
     add rax, 48
+    
+    cmp r11, STR_MAX+1
+    jae PopRemLoop
+
     mov byte [rbx], al
     inc rbx
     inc r11
