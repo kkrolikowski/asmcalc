@@ -7,6 +7,7 @@ LF                          equ 10
 
 newLine                     db LF, NULL
 remainder                   db " R: ", NULL
+zero                        db "0", LF, NULL
 
 extern int2str
 extern prints
@@ -52,6 +53,9 @@ calcSum:
     mov rax, rdi
     add rax, rdx
 
+    cmp rax, 0
+    je printZero
+
     mov rdi, rax
     mov rsi, rbx
     call int2str
@@ -67,6 +71,9 @@ calcSub:
     mov rax, rdi
     sub rax, rdx
     
+    cmp rax, 0
+    je printZero
+
     mov rdi, rax
     mov rsi, rbx
     call int2str
@@ -100,6 +107,12 @@ calcDiv:
     mov rdi, rbx
     call prints
     mov rdi, newLine
+    call prints
+
+    jmp calcEnd
+
+printZero:
+    mov rdi, zero
     call prints
 
 calcEnd:
