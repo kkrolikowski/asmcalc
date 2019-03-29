@@ -41,13 +41,11 @@ section .bss
 numA                resq 1
 numB                resq 1
 operation           resb 1
-intstr              resb INT_MAX+2      ; two extra bytes for sign and NULL termination
 
 extern getNum
 extern prints
 extern operator
 extern calc
-extern int2str
 
 section .text
 
