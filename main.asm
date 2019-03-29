@@ -31,7 +31,7 @@ tooFewError         db "Error: Too few arguments.", LF
                     db "Syntax: ./asmcalc a [+|-|*|/] b", LF, NULL
 tooManyError        db "Error: Too many arguments.", LF
                     db "Syntax: ./asmcalc a [+|-|*|/] b", LF, NULL
-newLine             db LF, NULL
+
 ; -----
 ; Calculation results
 
@@ -54,10 +54,16 @@ main:
     mov r12, rdi                        ; argc
     mov r13, rsi                        ; *argv[]
 
+; -----
+; Check argumets count
+
     cmp r12, 4
     jb tooFewArgs
     cmp r12, 4
     ja tooManyArgs
+
+; -----
+; Get first number
 
     mov rdi, qword [r13+1*8]
     call getNum
@@ -65,13 +71,19 @@ main:
     je FirstInvalid
 
     mov qword [numA], rax
-    
+
+; -----
+; Get operator
+
     mov rdi, qword [r13+2*8]
     call operator
 
     cmp rax, 0
     jl InvalidOperator
     mov byte [operation], al
+
+; -----
+; Get second number
 
     mov rdi, qword [r13+3*8]
     call getNum
@@ -80,6 +92,9 @@ main:
 
     mov qword [numB], rax
 
+; -----
+; Calculate and display result
+
     mov rdi, qword [numA]
     mov sil, byte [operation]
     mov rdx, qword [numB]
@@ -87,6 +102,8 @@ main:
 
     jmp last
 
+; --------------------------------------------------------------------------
+;                                   ERROR messages
 tooFewArgs:
     mov rdi, tooFewError
     call prints
