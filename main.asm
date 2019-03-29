@@ -87,15 +87,6 @@ main:
     mov rdx, qword [numB]
     call calc
 
-    mov rdi, rax
-    mov rsi, intstr
-    call int2str
-
-    mov rdi, intstr
-    call prints
-    mov rdi, newLine
-    call prints
-
     jmp last
 
 tooFewArgs:
