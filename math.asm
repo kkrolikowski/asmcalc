@@ -18,10 +18,10 @@ global calc
 calc:
     push rbp
     mov rbp, rsp
-    sub rsp, 11
+    sub rsp, 21
     push rbx
 
-    lea rbx, byte [rbp-11]
+    lea rbx, byte [rbp-21]
 
     cmp sil, "+"
     je calcSum
