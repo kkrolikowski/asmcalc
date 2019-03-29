@@ -158,6 +158,7 @@ getNumEnd:
 global prints
 prints:
     push rbx
+    push rdx
 
     mov rbx, rdi                        ; save the string adress
     mov rdx, 0                          ; set character counter
@@ -190,6 +191,7 @@ CharCountDone:
 ; Stage III - function end
 
 printsDone:
+    pop rdx
     pop rbx
     ret
 
@@ -260,6 +262,7 @@ global int2str
 int2str:
     push rbx
     push r12
+    push rdx
 
     mov r10, 10                         ; divisior
     mov r12, 0                          ; stack items count
@@ -300,6 +303,7 @@ PopRemLoop:
 
 int2strEND:
     mov byte [rbx], NULL
+    pop rdx
     pop r12
     pop rbx
     ret
