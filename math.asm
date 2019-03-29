@@ -6,6 +6,7 @@ NULL                        equ 0
 LF                          equ 10
 
 newLine                     db LF, NULL
+remainder                   db " R: ", NULL
 
 extern int2str
 extern prints
@@ -27,6 +28,8 @@ calc:
     je calcSub
     cmp sil, "*"
     je calcMul
+    cmp sil, "/"
+    je calcDiv
 
     jmp calcEnd
 
@@ -65,6 +68,32 @@ calcSub:
     sub rax, rdx
     
     mov rdi, rax
+    mov rsi, rbx
+    call int2str
+
+    mov rdi, rbx
+    call prints
+    mov rdi, newLine
+    call prints
+
+    jmp calcEnd
+
+calcDiv:
+    mov rax, rdi
+    mov r10, rdx
+    cqo
+    idiv r10
+
+    mov rdi, rax
+    mov rsi, rbx
+    call int2str
+
+    mov rdi, rbx
+    call prints
+    mov rdi, remainder
+    call prints
+
+    mov rdi, rdx
     mov rsi, rbx
     call int2str
 
