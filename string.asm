@@ -270,10 +270,17 @@ int2str:
     mov r11, 0                          ; items popped from stack
     mov rbx, rsi                        ; string pointer
 
+; -----
+; Detect if given number is less than 0
+
     mov rax, rdi
     cmp rax, 0
     jl Negative
     jmp PushRemLoop
+
+; -----
+; If number is less than 0, convert it to positive
+; and put '-' sign as the first element of array
 
 Negative:
     cqo
@@ -281,6 +288,12 @@ Negative:
     mov byte [rbx], "-"
     inc rbx
 
+; -----
+; Push every digit on the stack
+; To achieve this, implement a simple agorithm:
+;   1. divide number by 10
+;   2. push remainder on the stack
+;   3. repeat untill result is greater than 0
 PushRemLoop:
     cmp rax, 0
     je PopRemLoop
@@ -288,22 +301,28 @@ PushRemLoop:
     mov rdx, 0
     div r10
     push rdx
-    inc r12
+    inc r12                             ; increment stack items count
     jmp PushRemLoop
 
+; -----
+; Get every digit from stack, convert it into character
+; and save in the following char array fields
 PopRemLoop:
-    cmp r11, r12
+    cmp r11, r12                        ; check if we've reached end of stack
     je int2strEND
 
     pop rax
-    add rax, 48
-    
+    add rax, 48                         ; char. conversion
+
+; -----
+; If number of items exceed char limit for 64-bit value, just pop item from stack
+; and skip updating array. This prevents buffer overflow.
     cmp r11, STR_MAX+1
     jae PopRemLoop
 
     mov byte [rbx], al
-    inc rbx
-    inc r11
+    inc rbx                             ; next array field
+    inc r11                             ; items popped from stack
     jmp PopRemLoop
 
 int2strEND:
